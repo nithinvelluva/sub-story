@@ -52,25 +52,25 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <StatsCards {...stats} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <RecentSubscriptions 
                 subscriptions={mockSubscriptions} 
                 onViewAll={() => setActiveView('subscriptions')}
               />
-              <div className="glass-card p-6">
+              <div className="glass-card p-4 sm:p-6">
                 <h3 className="text-lg font-semibold mb-4">Quick Insights</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Most expensive</span>
-                    <span className="font-medium">Adobe Creative Cloud</span>
+                    <span className="text-muted-foreground text-sm">Most expensive</span>
+                    <span className="font-medium text-sm">Adobe Creative Cloud</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Next renewal</span>
-                    <span className="font-medium">Netflix (Jan 15)</span>
+                    <span className="text-muted-foreground text-sm">Next renewal</span>
+                    <span className="font-medium text-sm">Netflix (Jan 15)</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">Top category</span>
-                    <span className="font-medium">Entertainment</span>
+                    <span className="text-muted-foreground text-sm">Top category</span>
+                    <span className="font-medium text-sm">Entertainment</span>
                   </div>
                 </div>
               </div>
@@ -87,7 +87,7 @@ const Index = () => {
                 {mockSubscriptions.length} total subscriptions
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {mockSubscriptions.map((subscription) => (
                 <SubscriptionCard
                   key={subscription.id}
@@ -134,21 +134,23 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="min-h-screen flex w-full">
         <AppSidebar activeView={activeView} onViewChange={handleViewChange} />
         
-        <SidebarInset>
+        <SidebarInset className="flex-1 w-full min-w-0">
           <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
             <SidebarTrigger className="-ml-1" />
-            <div className="flex-1" />
-            <DashboardHeader 
-              userName="Alex" 
-              onAddSubscription={() => handleViewChange('add')}
-            />
+            <div className="flex-1 min-w-0" />
+            <div className="hidden sm:block">
+              <DashboardHeader 
+                userName="Alex" 
+                onAddSubscription={() => handleViewChange('add')}
+              />
+            </div>
           </header>
           
-          <main className="flex-1">
-            <div className="p-6">
+          <main className="flex-1 w-full min-w-0">
+            <div className="p-4 sm:p-6">
               {renderContent()}
             </div>
           </main>
