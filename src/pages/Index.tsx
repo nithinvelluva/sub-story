@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { AppSidebar } from "@/components/layout/Sidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { RecentSubscriptions } from "@/components/dashboard/RecentSubscriptions";
 import { SubscriptionCard } from "@/components/subscriptions/SubscriptionCard";
 import { mockSubscriptions, calculateStats } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 const Index = () => {
   const [activeView, setActiveView] = useState('dashboard');
@@ -128,20 +133,28 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar activeView={activeView} onViewChange={handleViewChange} />
-      
-      <main className="flex-1">
-        <DashboardHeader 
-          userName="Alex" 
-          onAddSubscription={() => handleViewChange('add')}
-        />
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar activeView={activeView} onViewChange={handleViewChange} />
         
-        <div className="p-6">
-          {renderContent()}
-        </div>
-      </main>
-    </div>
+        <SidebarInset>
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+            <SidebarTrigger className="-ml-1" />
+            <div className="flex-1" />
+            <DashboardHeader 
+              userName="Alex" 
+              onAddSubscription={() => handleViewChange('add')}
+            />
+          </header>
+          
+          <main className="flex-1">
+            <div className="p-6">
+              {renderContent()}
+            </div>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 };
 
