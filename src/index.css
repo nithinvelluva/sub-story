@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Core theme colors */
-    --background: 248 250 252;
+    --background: 0 0% 100%;
     --foreground: 212 20% 10%;
 
     /* Brand colors - Deep purple/blue gradient theme */
@@ -29,6 +29,10 @@
 
     --accent: 270 95% 95%;
     --accent-foreground: 270 85% 35%;
+
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 212 20% 10%;
 
     /* Status colors */
     --success: 142 76% 36%;
@@ -59,19 +63,12 @@
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
