@@ -27,8 +27,16 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const collapsed = state === "collapsed";
+
+  const handleViewChange = (view: string) => {
+    onViewChange(view);
+    // Close mobile sidebar after navigation
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -71,7 +79,7 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
                       isActive={isActive}
-                      onClick={() => onViewChange(item.id)}
+                      onClick={() => handleViewChange(item.id)}
                       tooltip={collapsed ? item.label : undefined}
                     >
                       <Icon className="w-4 h-4" />
@@ -97,7 +105,7 @@ export function AppSidebar({ activeView, onViewChange }: AppSidebarProps) {
                   <SidebarMenuItem key={action.id}>
                     <SidebarMenuButton
                       size="sm"
-                      onClick={() => onViewChange(action.id)}
+                      onClick={() => handleViewChange(action.id)}
                       tooltip={collapsed ? action.label : undefined}
                     >
                       <Icon className="w-4 h-4" />
