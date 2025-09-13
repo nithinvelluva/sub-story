@@ -14,7 +14,86 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          billing_cycle: string
+          created_at: string | null
+          currency: string
+          custom_interval_days: number | null
+          id: string
+          name: string
+          next_renewal_date: string
+          notes: string | null
+          payment_method: string | null
+          price_cents: number
+          status: string
+          tags: string | null
+          updated_at: string | null
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          billing_cycle: string
+          created_at?: string | null
+          currency?: string
+          custom_interval_days?: number | null
+          id?: string
+          name: string
+          next_renewal_date: string
+          notes?: string | null
+          payment_method?: string | null
+          price_cents: number
+          status?: string
+          tags?: string | null
+          updated_at?: string | null
+          url?: string | null
+          user_id: string
+        }
+        Update: {
+          billing_cycle?: string
+          created_at?: string | null
+          currency?: string
+          custom_interval_days?: number | null
+          id?: string
+          name?: string
+          next_renewal_date?: string
+          notes?: string | null
+          payment_method?: string | null
+          price_cents?: number
+          status?: string
+          tags?: string | null
+          updated_at?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
