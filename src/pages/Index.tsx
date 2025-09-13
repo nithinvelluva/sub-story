@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { AppSidebar } from "@/components/layout/Sidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatsCards } from "@/components/dashboard/StatsCards";
@@ -6,6 +8,8 @@ import { RecentSubscriptions } from "@/components/dashboard/RecentSubscriptions"
 import { SubscriptionCard } from "@/components/subscriptions/SubscriptionCard";
 import { mockSubscriptions, calculateStats } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   SidebarProvider,
   SidebarInset,
@@ -15,8 +19,17 @@ import {
 const Index = () => {
   const [activeView, setActiveView] = useState('dashboard');
   const { toast } = useToast();
+  const { user, loading, signOut } = useAuth();
+  const navigate = useNavigate();
   
   const stats = calculateStats(mockSubscriptions);
+
+  // Redirect to auth if not authenticated
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth');
+    }
+  }, [user, loading, navigate]);
 
   const handleViewChange = (view: string) => {
     setActiveView(view);
@@ -45,6 +58,56 @@ const Index = () => {
       description: "This feature requires Supabase integration for data persistence.",
     });
   };
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md glass-card">
+          <CardContent className="flex items-center justify-center p-8">
+            <div className="text-center space-y-2">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+              <p className="text-muted-foreground">Loading...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show login prompt if not authenticated
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-muted/20 to-accent/10">
+        <Card className="w-full max-w-md glass-card">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-center">Subscription Tracker</CardTitle>
+            <CardDescription className="text-center">
+              Please sign in to access your subscription dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Button 
+              onClick={() => navigate('/auth')} 
+              className="w-full gradient-primary"
+            >
+              Sign In
+            </Button>
+            <div className="text-center text-sm">
+              <span className="text-muted-foreground">Don't have an account?</span>{' '}
+              <Button
+                variant="link"
+                className="p-0 h-auto font-normal"
+                onClick={() => navigate('/auth?mode=signup')}
+              >
+                Sign up
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const renderContent = () => {
     switch (activeView) {
@@ -143,10 +206,18 @@ const Index = () => {
             <div className="flex-1 min-w-0" />
             <div className="hidden sm:block">
               <DashboardHeader 
-                userName="Alex" 
+                userName={user?.email?.split('@')[0] || 'User'} 
                 onAddSubscription={() => handleViewChange('add')}
               />
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={signOut}
+              className="ml-2"
+            >
+              Sign Out
+            </Button>
           </header>
           
           <main className="flex-1 w-full min-w-0">
