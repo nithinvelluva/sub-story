@@ -10,6 +10,7 @@ import { mockSubscriptions, calculateStats } from "@/data/mockData";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserDropdown } from "@/components/ui/user-dropdown";
 import {
   SidebarProvider,
   SidebarInset,
@@ -210,14 +211,7 @@ const Index = () => {
                 onAddSubscription={() => handleViewChange('add')}
               />
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={signOut}
-              className="ml-2"
-            >
-              Sign Out
-            </Button>
+            <UserDropdown />
           </header>
           
           <main className="flex-1 w-full min-w-0">
