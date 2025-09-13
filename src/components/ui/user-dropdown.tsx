@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export const UserDropdown = () => {
   const { user, signOut } = useAuth();
@@ -22,6 +22,18 @@ export const UserDropdown = () => {
     return email.split('@')[0];
   };
 
+  const getUserAvatar = () => {
+    // Try to get avatar from user metadata (Google, etc.)
+    return user?.user_metadata?.avatar_url || 
+           user?.user_metadata?.picture || 
+           user?.user_metadata?.photo_url ||
+           null;
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   if (!user) return null;
 
   return (
@@ -29,6 +41,10 @@ export const UserDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
+            <AvatarImage 
+              src={getUserAvatar()} 
+              alt={getUserDisplayName(user?.email || 'User')} 
+            />
             <AvatarFallback className="text-xs font-medium bg-primary text-primary-foreground">
               {getInitials(user.email || 'U')}
             </AvatarFallback>
@@ -58,7 +74,7 @@ export const UserDropdown = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           className="cursor-pointer text-destructive focus:text-destructive"
-          onClick={signOut}
+          onClick={handleSignOut}
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign out</span>
