@@ -6,7 +6,7 @@ import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { RecentSubscriptions } from "@/components/dashboard/RecentSubscriptions";
 import { SubscriptionCard } from "@/components/subscriptions/SubscriptionCard";
-import { mockSubscriptions, calculateStats } from "@/data/mockData";
+import { useSubscriptions } from "@/hooks/useSubscriptions";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +22,7 @@ const Index = () => {
   const { toast } = useToast();
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
-  
-  const stats = calculateStats(mockSubscriptions);
+  const { subscriptions, loading: subscriptionsLoading, stats } = useSubscriptions();
 
   // Redirect to auth if not authenticated
   useEffect(() => {
@@ -118,7 +117,7 @@ const Index = () => {
             <StatsCards {...stats} />
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <RecentSubscriptions 
-                subscriptions={mockSubscriptions} 
+                subscriptions={subscriptions} 
                 onViewAll={() => setActiveView('subscriptions')}
               />
               <div className="glass-card p-4 sm:p-6">
@@ -148,11 +147,27 @@ const Index = () => {
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">All Subscriptions</h2>
               <div className="text-sm text-muted-foreground">
-                {mockSubscriptions.length} total subscriptions
+                {subscriptions.length} total subscriptions
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-              {mockSubscriptions.map((subscription) => (
+            {subscriptionsLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="glass-card p-6 animate-pulse">
+                    <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
+                    <div className="h-6 bg-muted rounded w-1/2 mb-2"></div>
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                  </div>
+                ))}
+              </div>
+            ) : subscriptions.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-lg">No subscriptions found</p>
+                <p className="text-muted-foreground text-sm mt-2">Add your first subscription to get started</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+                {subscriptions.map((subscription) => (
                 <SubscriptionCard
                   key={subscription.id}
                   subscription={subscription}
@@ -160,8 +175,9 @@ const Index = () => {
                   onDelete={(id) => handleSubscriptionAction('Delete', id)}
                   onViewDetails={(id) => handleSubscriptionAction('View', id)}
                 />
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         );
         

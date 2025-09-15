@@ -23,6 +23,7 @@ export function RecentSubscriptions({ subscriptions, onViewAll }: RecentSubscrip
       case 'monthly': return '/mo';
       case 'yearly': return '/yr';
       case 'weekly': return '/wk';
+      case 'custom': return '';
       default: return '';
     }
   };

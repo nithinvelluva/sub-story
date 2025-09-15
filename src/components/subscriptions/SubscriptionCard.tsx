@@ -14,7 +14,7 @@ export interface Subscription {
   name: string;
   price: number;
   currency: string;
-  billingCycle: 'monthly' | 'yearly' | 'weekly';
+  billingCycle: 'monthly' | 'yearly' | 'weekly' | 'custom';
   nextChargeDate: string;
   status: 'active' | 'cancelled' | 'paused';
   category: string;
@@ -50,6 +50,7 @@ export function SubscriptionCard({
       case 'monthly': return '/month';
       case 'yearly': return '/year';
       case 'weekly': return '/week';
+      case 'custom': return '';
       default: return '';
     }
   };
