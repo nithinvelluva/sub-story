@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      currency_master: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          decimal_places: number
+          name: string
+          sort_order: number
+          symbol: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          decimal_places?: number
+          name: string
+          sort_order?: number
+          symbol: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          decimal_places?: number
+          name?: string
+          sort_order?: number
+          symbol?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
